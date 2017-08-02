@@ -1,4 +1,4 @@
-package com.hovanly.dut.scaleiamgesample;
+package com.hovanly.dut.canvas;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

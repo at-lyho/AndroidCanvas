@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.hovanly.dut.scaleiamgesample.MainActivity">
+    tools:context="com.hovanly.dut.canvas.MainActivity">
 
-   <com.hovanly.dut.scaleiamgesample.CustomView
+   <com.hovanly.dut.canvas.CustomView
        android:layout_width="0dp"
        android:layout_height="0dp"
        android:background="#979797"

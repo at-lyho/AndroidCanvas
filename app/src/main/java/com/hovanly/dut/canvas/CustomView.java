@@ -1,4 +1,4 @@
-package com.hovanly.dut.scaleiamgesample;
+package com.hovanly.dut.canvas;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -39,7 +39,7 @@ public class CustomView extends View {
         paint.setColor(Color.RED);
         mGestureDetector = new GestureDetector(context, new GestureDetectorCustom());
         mSticker = new Sticker();
-        mSticker.setBitmap(BitmapUtils.getBimapFormResouce(context, R.drawable.broccoli));
+        mSticker.setBitmap(GraphicUtils.getBitmapFormResource(context, R.drawable.broccoli));
     }
 
     @Override

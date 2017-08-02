@@ -1,4 +1,4 @@
-package com.hovanly.dut.scaleiamgesample;
+package com.hovanly.dut.canvas;
 
 import org.junit.Test;
 

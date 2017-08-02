@@ -1,4 +1,4 @@
-package com.hovanly.dut.scaleiamgesample;
+package com.hovanly.dut.canvas;
 
 import android.graphics.Matrix;
 import android.support.annotation.NonNull;
