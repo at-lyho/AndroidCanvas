@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -17,8 +18,8 @@ import android.view.View;
 public class CustomView extends View {
     private Paint paint;
     private GestureDetector mGestureDetector;
-    private float mDistanceX;
-    private float mDistanceY;
+    private float mTouchX;
+    private float mTouchY;
     private Sticker mSticker;
 
 
@@ -44,14 +45,31 @@ public class CustomView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.save();
         mSticker.onDraw(canvas);
-        canvas.restore();
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         mGestureDetector.onTouchEvent(event);
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                mTouchX = event.getX();
+                mTouchY = event.getY();
+                if (mSticker.isTouchOnTicker(mTouchX, mTouchY)){
+                    Toast.makeText(getContext(), "inside", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case MotionEvent.ACTION_MOVE:
+                mSticker.updateMove(event.getX() - mTouchX, event.getY() - mTouchY);
+                mSticker.updateDrag(20);
+               // invalidate();
+              //  invalidate();
+                break;
+            case MotionEvent.ACTION_UP:
+                mTouchX = event.getX();
+                mTouchY = event.getY();
+                break;
+        }
         return true;
     }
   /*  private double getAngle(double xTouch, double yTouch) {
@@ -104,9 +122,10 @@ public class CustomView extends View {
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
          //   Toast.makeText(getContext(), "onScroll", Toast.LENGTH_SHORT).show();
-           /* mDistanceX = -distanceX;
-            mDistanceY = -distanceY;*/
+           /* mTouchX = -distanceX;
+            mTouchY = -distanceY;*/
             //  invalidate();
+         //   invalidate();
             return true;
         }
 
