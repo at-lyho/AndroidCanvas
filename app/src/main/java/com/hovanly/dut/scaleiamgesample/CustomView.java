@@ -19,6 +19,8 @@ public class CustomView extends View {
     private GestureDetector mGestureDetector;
     private float mDistanceX;
     private float mDistanceY;
+    private Sticker mSticker;
+
 
     public CustomView(Context context) {
         super(context);
@@ -35,22 +37,21 @@ public class CustomView extends View {
         paint.setFlags(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(Color.RED);
         mGestureDetector = new GestureDetector(context, new GestureDetectorCustom());
+        mSticker = new Sticker();
+        mSticker.setBitmap(BitmapUtils.getBimapFormResouce(context, R.drawable.broccoli));
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.save();
-        canvas.translate(mDistanceX, mDistanceY);
-        canvas.drawCircle(canvas.getWidth() / 2, canvas.getHeight() / 2, 100, paint);
-        canvas.rotate(30);
+        mSticker.onDraw(canvas);
         canvas.restore();
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         mGestureDetector.onTouchEvent(event);
-
         return true;
     }
   /*  private double getAngle(double xTouch, double yTouch) {
@@ -105,7 +106,7 @@ public class CustomView extends View {
          //   Toast.makeText(getContext(), "onScroll", Toast.LENGTH_SHORT).show();
            /* mDistanceX = -distanceX;
             mDistanceY = -distanceY;*/
-            invalidate();
+            //  invalidate();
             return true;
         }
 

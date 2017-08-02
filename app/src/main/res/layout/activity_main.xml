@@ -7,8 +7,9 @@
     tools:context="com.hovanly.dut.scaleiamgesample.MainActivity">
 
    <com.hovanly.dut.scaleiamgesample.CustomView
-         android:layout_width="match_parent"
-         android:layout_height="match_parent"
+       android:layout_width="0dp"
+       android:layout_height="0dp"
+       android:background="#979797"
          android:id="@+id/customView"
          app:layout_constraintBottom_toBottomOf="parent"
          app:layout_constraintLeft_toLeftOf="parent"
