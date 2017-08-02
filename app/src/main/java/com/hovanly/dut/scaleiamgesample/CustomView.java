@@ -9,7 +9,6 @@ import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -103,7 +102,7 @@ public class CustomView extends View {
 
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            Toast.makeText(getContext(), "onScroll", Toast.LENGTH_SHORT).show();
+         //   Toast.makeText(getContext(), "onScroll", Toast.LENGTH_SHORT).show();
            /* mDistanceX = -distanceX;
             mDistanceY = -distanceY;*/
             invalidate();
