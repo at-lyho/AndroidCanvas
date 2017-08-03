@@ -56,7 +56,7 @@ public class CustomView extends View {
             case MotionEvent.ACTION_DOWN:
                 mTouchX = event.getX();
                 mTouchY = event.getY();
-                if (mSticker.isTouchInsideTicker(mTouchX, mTouchY)){
+                if (mSticker.isTouchInside(mTouchX, mTouchY)){
                     Toast.makeText(getContext(), "inside", Toast.LENGTH_SHORT).show();
                 }
                 break;

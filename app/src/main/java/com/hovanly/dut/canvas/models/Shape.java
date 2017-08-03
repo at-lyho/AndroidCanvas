@@ -1,8 +1,7 @@
 package com.hovanly.dut.canvas.models;
 
 import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.support.annotation.NonNull;
+import android.graphics.Paint;
 
 import lombok.Data;
 
@@ -12,24 +11,14 @@ import lombok.Data;
  */
 @Data
 abstract class Shape {
-    private float coordinateX;
-    private float coordinateY;
+    private Paint paint;
+    private float realCoordinateX;
+    private float realCoordinateY;
     abstract public void onDraw(Canvas canvas);
 
     public void updateCoordinate(float x, float y) {
-        coordinateX = x;
-        coordinateY = y;
+        realCoordinateX = x;
+        realCoordinateY = y;
     }
-
-    public void updateCoordinate(float x, float y, @NonNull Matrix matrix) {
-        Pointer pointer = new Pointer(x, y, matrix);
-        coordinateX = pointer.getX();
-        coordinateY = pointer.getY();
-    }
-
-    public void updateCoordinate(@NonNull Matrix matrix) {
-        Pointer pointer = new Pointer(coordinateX, coordinateY, matrix);
-        coordinateX = pointer.getX();
-        coordinateY = pointer.getY();
-    }
+    abstract public boolean isTouchInside(float x, float y);
 }
