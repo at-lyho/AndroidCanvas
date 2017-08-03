@@ -33,13 +33,13 @@ public class Sticker extends BaseSticker {
         paint.setStrokeWidth(5);
         paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.STROKE);
-        setBitmap(GraphicUtils.getBitmapFormResource(context, R.drawable.broccoli));
+        setBitmap(GraphicUtils.getBitmapFormResource(context, R.drawable.broccoli, GraphicUtils.dpToPx(100), GraphicUtils.dpToPx(100)));
         setBitmapDelete(GraphicUtils.getBitmapFormResource(context, R.drawable.ic_remove, GraphicUtils.dpToPx(24), GraphicUtils.dpToPx(24)));
         setBitmapRotate(GraphicUtils.getBitmapFormResource(context, R.drawable.ic_rotate, GraphicUtils.dpToPx(24), GraphicUtils.dpToPx(24)));
-        setCoordinateX(200);
-        setCoordinateY(200);
+        setCoordinateX(100);
+        setCoordinateY(100);
         setScale(2f);
-        setDegrees(30f);
+        setDegrees(10f);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class Sticker extends BaseSticker {
 
     private void drawSticker(Canvas canvas) {
         onUpdateMatrixSticker();
-        canvas.concat(getSubMatrix());
+        canvas.concat(getMatrix());
         canvas.drawBitmap(bitmap, getCoordinateX(), getCoordinateY(), null);
     }
 
@@ -88,8 +88,9 @@ public class Sticker extends BaseSticker {
 
     private void onUpdateMatrixSticker() {
         subMatrix.reset();
-        subMatrix.postScale(getScale(), getScale(), 150, 150);
-        subMatrix.postRotate(getDegrees(), 150, 150);
+        subMatrix.postScale(getScale(), getScale());
+        subMatrix.postRotate(getDegrees());
+     //   subMatrix.postTranslate(distanceX, distanceY);
         postConcatMatrix(subMatrix);
     }
 

@@ -62,7 +62,7 @@ public class CustomView extends View {
                 mSticker.updateMove(event.getX() - mTouchX, event.getY() - mTouchY);
                 mTouchX = event.getX();
                 mTouchY = event.getY();
-                invalidate();
+              //  invalidate();
                 break;
             case MotionEvent.ACTION_UP:
                 break;
