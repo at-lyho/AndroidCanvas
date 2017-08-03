@@ -9,11 +9,11 @@ import lombok.Data;
  * Created by Ly Ho V. on 02/08/2017
  */
 @Data
-abstract class BaseSticker {
+abstract class Shape {
     private float coordinateX;
     private float coordinateY;
-    private float scale;
-    private float degrees;
+
 
     abstract public void onDraw(Canvas canvas);
+
 }

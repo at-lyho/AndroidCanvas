@@ -17,14 +17,16 @@ import lombok.Data;
  * Created by Ly Ho V. on 02/08/2017
  */
 @Data
-public class Sticker extends BaseSticker {
+public class Sticker extends Shape {
     private static final String TAG = Sticker.class.getSimpleName();
     private Bitmap bitmap;
     private Bitmap bitmapRotate;
     private Bitmap bitmapDelete;
-    private float distanceX = 10f;
-    private float distanceY = 10f;
+    private float distanceX;
+    private float distanceY;
     private Paint paint;
+    private float scale;
+    private float degrees;
     private Path path = new Path();
     private Matrix matrix = new Matrix();
 
