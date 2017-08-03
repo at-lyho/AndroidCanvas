@@ -62,7 +62,7 @@ public class Sticker extends Shape {
     }
 
     private void drawRotate(Canvas canvas) {
-        Pointer pointer = new Pointer(getCoordinateX() + canvas.getWidth(), getCoordinateY() + canvas.getHeight(), getMatrix());
+        Pointer pointer = new Pointer(getCoordinateX() + bitmap.getWidth(), getCoordinateY() + bitmap.getHeight(), getMatrix());
         canvas.drawBitmap(bitmapRotate, pointer.getX() - bitmapDelete.getWidth() / 2, pointer.getY() - bitmapDelete.getHeight() / 2, null);
     }
     private void drawBoundSticker(Canvas canvas) {

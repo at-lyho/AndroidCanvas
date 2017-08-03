@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ScaleIamgeSample.iml" filepath="$PROJECT_DIR$/ScaleIamgeSample.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AndroidCanvas.iml" filepath="$PROJECT_DIR$/AndroidCanvas.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
