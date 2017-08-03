@@ -23,11 +23,12 @@ public class Sticker extends Shape {
     private float distanceX;
     private float distanceY;
     private Paint paint;
+    private Path path = new Path();
     private Matrix matrix = new Matrix();
 
     public Sticker(@NonNull Context context) {
         paint = new Paint();
-        paint.setStrokeWidth(2);
+        paint.setStrokeWidth(5);
         paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.STROKE);
         setBitmap(GraphicUtils.getBitmapFormResource(context, R.drawable.broccoli));
@@ -41,37 +42,47 @@ public class Sticker extends Shape {
 
     @Override
     public void onDraw(Canvas canvas) {
+        canvas.save();
         drawSticker(canvas);
+        canvas.restore();
         drawBoundSticker(canvas);
         drawDelete(canvas);
+        drawRotate(canvas);
     }
 
     private void drawSticker(Canvas canvas) {
-        canvas.save();
-        updateMatrixSticker();
+        onUpdateMatrixSticker();
         canvas.concat(getMatrix());
         canvas.drawBitmap(bitmap, getCoordinateX(), getCoordinateY(), null);
-        canvas.restore();
-
     }
 
     private void drawDelete(Canvas canvas) {
-        canvas.drawBitmap(bitmapDelete, getCoordinateX() - bitmapDelete.getWidth() / 2, getCoordinateY() - bitmapDelete.getHeight() / 2, null);
+        Pointer pointer = new Pointer(getCoordinateX(), getCoordinateY(), getMatrix());
+        canvas.drawBitmap(bitmapDelete, pointer.getX() - bitmapDelete.getWidth() / 2, pointer.getY() - bitmapDelete.getHeight() / 2, null);
     }
 
+    private void drawRotate(Canvas canvas) {
+        Pointer pointer = new Pointer(getCoordinateX() + canvas.getWidth(), getCoordinateY() + canvas.getHeight(), getMatrix());
+        canvas.drawBitmap(bitmapRotate, pointer.getX() - bitmapDelete.getWidth() / 2, pointer.getY() - bitmapDelete.getHeight() / 2, null);
+    }
     private void drawBoundSticker(Canvas canvas) {
-        Path path = new Path();
-        float x = getCoordinateX();
-        float y = getCoordinateY();
-        path.moveTo(x, y);
-        path.lineTo(bitmap.getWidth() + x, y);
-        path.lineTo(bitmap.getWidth() + x, bitmap.getHeight() + y);
-        path.lineTo(x, bitmap.getHeight() + y);
-        path.lineTo(x, y);
+        float coordinateX = getCoordinateX();
+        float coordinateY = getCoordinateY();
+        Matrix matrix = getMatrix();
+        Pointer pointer1 = new Pointer(coordinateX, coordinateY, matrix);
+        Pointer pointer2 = new Pointer(coordinateX + bitmap.getWidth(), coordinateY, matrix);
+        Pointer pointer3 = new Pointer(coordinateX + bitmap.getWidth(), coordinateY + bitmap.getHeight(), matrix);
+        Pointer pointer4 = new Pointer(coordinateX, coordinateY + bitmap.getHeight(), matrix);
+        path.reset();
+        path.moveTo(pointer1.getX(), pointer1.getY());
+        path.lineTo(pointer2.getX(), pointer2.getY());
+        path.lineTo(pointer3.getX(), pointer3.getY());
+        path.lineTo(pointer4.getX(), pointer4.getY());
+        path.lineTo(pointer1.getX(), pointer1.getY());
         canvas.drawPath(path, paint);
     }
 
-    private void updateMatrixSticker() {
+    private void onUpdateMatrixSticker() {
         float scale = getScale();
         float degress = getDegrees();
         matrix.reset();
