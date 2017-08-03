@@ -14,15 +14,12 @@ import lombok.Data;
  * Created by Ly Ho V. on 02/08/2017
  */
 @Data
-public class Sticker {
+public class Sticker extends Shape {
     private Bitmap bitmap;
     private Bitmap bitmapRotate;
     private Bitmap bitmapDelete;
-    private float coordinateX;
-    private float coordinateY;
     private float distanceX;
     private float distanceY;
-    private Matrix matrix = new Matrix();
     private Paint paint;
     private float drag = 0f;
     public Sticker() {
@@ -34,14 +31,12 @@ public class Sticker {
 
     public void onDraw(Canvas canvas) {
         canvas.save();
-        // canvas.rotate(drag, 150, 150);
-        // canvas.rotate(30f, 150, 150);
         Matrix matrix = new Matrix();
         matrix.postScale(2, 2, 150, 150);
         matrix.postRotate(10f, 150, 150);
         matrix.postTranslate(10, 10);
-        this.matrix.postConcat(matrix);
-        canvas.concat(this.matrix);
+        postConcatMatrix(matrix);
+        canvas.concat(getMatrix());
         drawPath(canvas);
         canvas.drawBitmap(bitmap, 100, 100, null);
         canvas.restore();
@@ -68,10 +63,10 @@ public class Sticker {
 
     public boolean isTouchOnTicker(float x, float y) {
         Pointer pointer = new Pointer(x, y);
-        Pointer pointer1 = new Pointer(100, 100, matrix);
-        Pointer pointer2 = new Pointer(100 + bitmap.getWidth(), 100, matrix);
-        Pointer pointer3 = new Pointer(100 + bitmap.getWidth(), 100 + bitmap.getHeight(), matrix);
-        Pointer pointer4 = new Pointer(100, 100 + bitmap.getHeight(), matrix);
+        Pointer pointer1 = new Pointer(100, 100, getMatrix());
+        Pointer pointer2 = new Pointer(100 + bitmap.getWidth(), 100, getMatrix());
+        Pointer pointer3 = new Pointer(100 + bitmap.getWidth(), 100 + bitmap.getHeight(), getMatrix());
+        Pointer pointer4 = new Pointer(100, 100 + bitmap.getHeight(), getMatrix());
         return GraphicUtils.pointInTriangle(pointer, pointer1, pointer2, pointer3)
                 || GraphicUtils.pointInTriangle(pointer, pointer1, pointer3, pointer4);
     }

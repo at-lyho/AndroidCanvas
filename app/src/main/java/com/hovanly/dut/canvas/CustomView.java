@@ -62,12 +62,10 @@ public class CustomView extends View {
             case MotionEvent.ACTION_MOVE:
                 mSticker.updateMove(event.getX() - mTouchX, event.getY() - mTouchY);
                 mSticker.updateDrag(20);
-               // invalidate();
-              //  invalidate();
-                break;
-            case MotionEvent.ACTION_UP:
                 mTouchX = event.getX();
                 mTouchY = event.getY();
+                break;
+            case MotionEvent.ACTION_UP:
                 break;
         }
         return true;
@@ -121,11 +119,6 @@ public class CustomView extends View {
 
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-         //   Toast.makeText(getContext(), "onScroll", Toast.LENGTH_SHORT).show();
-           /* mTouchX = -distanceX;
-            mTouchY = -distanceY;*/
-            //  invalidate();
-         //   invalidate();
             return true;
         }
 
