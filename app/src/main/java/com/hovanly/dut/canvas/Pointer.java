@@ -13,7 +13,6 @@ import lombok.Data;
 public class Pointer {
     private float x;
     private float y;
-    private Matrix matrix;
 
     public Pointer(float x, float y) {
         this.x = x;

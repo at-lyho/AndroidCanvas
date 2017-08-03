@@ -18,6 +18,11 @@ public class GraphicUtils {
         return BitmapFactory.decodeResource(context.getResources(), res);
     }
 
+    public static Bitmap getBitmapFormResource(Context context, int res, int width, int height) {
+        Bitmap bitmap = getBitmapFormResource(context, res);
+        return Bitmap.createScaledBitmap(bitmap, width, height, false);
+    }
+
     public static int dpToPx(int dpValue) {
         return (int) (dpValue * Resources.getSystem().getDisplayMetrics().density);
     }

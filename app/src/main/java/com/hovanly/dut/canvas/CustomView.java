@@ -38,8 +38,7 @@ public class CustomView extends View {
         paint.setFlags(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(Color.RED);
         mGestureDetector = new GestureDetector(context, new GestureDetectorCustom());
-        mSticker = new Sticker();
-        mSticker.setBitmap(GraphicUtils.getBitmapFormResource(context, R.drawable.broccoli));
+        mSticker = new Sticker(context);
     }
 
     @Override
@@ -55,13 +54,12 @@ public class CustomView extends View {
             case MotionEvent.ACTION_DOWN:
                 mTouchX = event.getX();
                 mTouchY = event.getY();
-                if (mSticker.isTouchOnTicker(mTouchX, mTouchY)){
+                if (mSticker.isTouchInsideTicker(mTouchX, mTouchY)){
                     Toast.makeText(getContext(), "inside", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
                 mSticker.updateMove(event.getX() - mTouchX, event.getY() - mTouchY);
-                mSticker.updateDrag(20);
                 mTouchX = event.getX();
                 mTouchY = event.getY();
                 break;
