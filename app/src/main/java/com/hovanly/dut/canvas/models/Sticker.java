@@ -36,7 +36,7 @@ public class Sticker extends Shape {
         setDegrees(2f);
         // Create Action Delete
         deletedAction = new EditerSticker();
-        deletedAction.setBitmap(GraphicUtils.getBitmapFormResource(context, R.drawable.ic_rotate, GraphicUtils.dpToPx(24), GraphicUtils.dpToPx(24)));
+        deletedAction.setBitmap(GraphicUtils.getBitmapFormResource(context, R.drawable.ic_remove, GraphicUtils.dpToPx(24), GraphicUtils.dpToPx(24)));
         deletedAction.updateCoordinate(getRealCoordinateX(), getRealCoordinateY());
         deletedAction.setOffsetX(deletedAction.getBitmap().getWidth() / 2);
         deletedAction.setOffsetY(deletedAction.getBitmap().getHeight() / 2);
@@ -58,18 +58,18 @@ public class Sticker extends Shape {
 
     @Override
     public void onDraw(Canvas canvas) {
-        canvas.save();
+        onUpdateMatrixSticker();
         drawSticker(canvas);
-        canvas.restore();
         drawBoundSticker(canvas);
         drawDelete(canvas);
         drawRotate(canvas);
     }
 
     private void drawSticker(Canvas canvas) {
-        onUpdateMatrixSticker();
+        canvas.save();
         canvas.concat(getMatrix());
         canvas.drawBitmap(bitmapSticker, getRealCoordinateX(), getRealCoordinateY(), null);
+        canvas.restore();
     }
 
     private void drawDelete(Canvas canvas) {
@@ -97,15 +97,6 @@ public class Sticker extends Shape {
 
     @Override
     public boolean isTouchInside(float x, float y) {
-        float coordinateX = getRealCoordinateX();
-        float coordinateY = getRealCoordinateY();
-        Matrix matrix = getMatrix();
-        Pointer pointer = new Pointer(x, y);
-        Pointer pointer1 = new Pointer(coordinateX, coordinateY, matrix);
-        Pointer pointer2 = new Pointer(coordinateX + bitmapSticker.getWidth(), coordinateY, matrix);
-        Pointer pointer3 = new Pointer(coordinateX + bitmapSticker.getWidth(), coordinateY + bitmapSticker.getHeight(), matrix);
-        Pointer pointer4 = new Pointer(coordinateX, coordinateY + bitmapSticker.getHeight(), matrix);
-        return GraphicUtils.pointInTriangle(pointer, pointer1, pointer2, pointer3)
-                || GraphicUtils.pointInTriangle(pointer, pointer1, pointer3, pointer4);
+        return rectSticker.isTouchInside(x, y, getMatrix());
     }
 }

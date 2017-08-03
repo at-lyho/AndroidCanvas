@@ -20,5 +20,8 @@ abstract class Shape {
         realCoordinateX = x;
         realCoordinateY = y;
     }
-    abstract public boolean isTouchInside(float x, float y);
+
+    public boolean isTouchInside(float x, float y) {
+        return false;
+    }
 }

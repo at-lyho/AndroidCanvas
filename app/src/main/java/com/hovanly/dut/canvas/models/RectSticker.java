@@ -7,6 +7,8 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.support.annotation.NonNull;
 
+import com.hovanly.dut.canvas.utils.GraphicUtils;
+
 import lombok.Data;
 
 /**
@@ -44,9 +46,14 @@ public class RectSticker extends Shape {
         //No-op
     }
 
-    @Override
-    public boolean isTouchInside(float x, float y) {
-        return false;
+    public boolean isTouchInside(float x, float y, @NonNull Matrix matrix) {
+        Pointer pointer = new Pointer(x, y);
+        Pointer pointer1 = new Pointer(realPointer1.getX(), realPointer1.getY(), matrix);
+        Pointer pointer2 = new Pointer(realPointer2.getX(), realPointer2.getY(), matrix);
+        Pointer pointer3 = new Pointer(realPointer3.getX(), realPointer3.getX(), matrix);
+        Pointer pointer4 = new Pointer(realPointer4.getX(), realPointer4.getY(), matrix);
+        return GraphicUtils.pointInTriangle(pointer, pointer1, pointer2, pointer3)
+                || GraphicUtils.pointInTriangle(pointer, pointer1, pointer3, pointer4);
     }
 
     public void onDraw(Canvas canvas, @NonNull Matrix matrix) {
