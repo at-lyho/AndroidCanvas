@@ -22,6 +22,7 @@ public class Sticker extends Shape {
     private float distanceY;
     private Paint paint;
     private float drag = 0f;
+    private Matrix matrix = new Matrix();
     public Sticker() {
         paint = new Paint();
         paint.setStrokeWidth(2);
@@ -31,7 +32,7 @@ public class Sticker extends Shape {
 
     public void onDraw(Canvas canvas) {
         canvas.save();
-        Matrix matrix = new Matrix();
+        matrix.reset();
         matrix.postScale(2, 2, 150, 150);
         matrix.postRotate(10f, 150, 150);
         matrix.postTranslate(10, 10);
