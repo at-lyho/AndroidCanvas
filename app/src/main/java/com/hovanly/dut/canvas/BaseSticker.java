@@ -11,7 +11,7 @@ import lombok.Data;
  * Created by Ly Ho V. on 02/08/2017
  */
 @Data
-abstract class Shape {
+abstract class BaseSticker {
     private float coordinateX;
     private float coordinateY;
     private float scale;

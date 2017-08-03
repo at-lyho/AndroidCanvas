@@ -8,6 +8,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import lombok.Data;
 
@@ -16,7 +17,8 @@ import lombok.Data;
  * Created by Ly Ho V. on 02/08/2017
  */
 @Data
-public class Sticker extends Shape {
+public class Sticker extends BaseSticker {
+    private static final String TAG = Sticker.class.getSimpleName();
     private Bitmap bitmap;
     private Bitmap bitmapRotate;
     private Bitmap bitmapDelete;
@@ -24,7 +26,7 @@ public class Sticker extends Shape {
     private float distanceY;
     private Paint paint;
     private Path path = new Path();
-    private Matrix matrix = new Matrix();
+    private Matrix subMatrix = new Matrix();
 
     public Sticker(@NonNull Context context) {
         paint = new Paint();
@@ -42,6 +44,7 @@ public class Sticker extends Shape {
 
     @Override
     public void onDraw(Canvas canvas) {
+        Log.d(TAG, "onDraw: ");
         canvas.save();
         drawSticker(canvas);
         canvas.restore();
@@ -52,23 +55,24 @@ public class Sticker extends Shape {
 
     private void drawSticker(Canvas canvas) {
         onUpdateMatrixSticker();
-        canvas.concat(getMatrix());
+        canvas.concat(getSubMatrix());
         canvas.drawBitmap(bitmap, getCoordinateX(), getCoordinateY(), null);
     }
 
     private void drawDelete(Canvas canvas) {
-        Pointer pointer = new Pointer(getCoordinateX(), getCoordinateY(), getMatrix());
+        Pointer pointer = new Pointer(getCoordinateX(), getCoordinateY(), getSubMatrix());
         canvas.drawBitmap(bitmapDelete, pointer.getX() - bitmapDelete.getWidth() / 2, pointer.getY() - bitmapDelete.getHeight() / 2, null);
     }
 
     private void drawRotate(Canvas canvas) {
-        Pointer pointer = new Pointer(getCoordinateX() + bitmap.getWidth(), getCoordinateY() + bitmap.getHeight(), getMatrix());
+        Pointer pointer = new Pointer(getCoordinateX() + bitmap.getWidth(), getCoordinateY() + bitmap.getHeight(), getSubMatrix());
         canvas.drawBitmap(bitmapRotate, pointer.getX() - bitmapDelete.getWidth() / 2, pointer.getY() - bitmapDelete.getHeight() / 2, null);
     }
+
     private void drawBoundSticker(Canvas canvas) {
         float coordinateX = getCoordinateX();
         float coordinateY = getCoordinateY();
-        Matrix matrix = getMatrix();
+        Matrix matrix = getSubMatrix();
         Pointer pointer1 = new Pointer(coordinateX, coordinateY, matrix);
         Pointer pointer2 = new Pointer(coordinateX + bitmap.getWidth(), coordinateY, matrix);
         Pointer pointer3 = new Pointer(coordinateX + bitmap.getWidth(), coordinateY + bitmap.getHeight(), matrix);
@@ -83,23 +87,23 @@ public class Sticker extends Shape {
     }
 
     private void onUpdateMatrixSticker() {
-        float scale = getScale();
-        float degress = getDegrees();
-        matrix.reset();
-        matrix.postScale(scale, scale, 150, 150);
-        matrix.postRotate(degress, 150, 150);
-        postConcatMatrix(matrix);
+        subMatrix.reset();
+        subMatrix.postScale(getScale(), getScale(), 150, 150);
+        subMatrix.postRotate(getDegrees(), 150, 150);
+        postConcatMatrix(subMatrix);
     }
 
     public void updateMove(float x, float y) {
         distanceX = x;
         distanceY = y;
+       /* setCoordinateX(getCoordinateX() + x);
+        setCoordinateY(getCoordinateY() + y);*/
     }
 
     public boolean isTouchInsideTicker(float x, float y) {
         float coordinateX = getCoordinateX();
         float coordinateY = getCoordinateY();
-        Matrix matrix = getMatrix();
+        Matrix matrix = getSubMatrix();
         Pointer pointer = new Pointer(x, y);
         Pointer pointer1 = new Pointer(coordinateX, coordinateY, matrix);
         Pointer pointer2 = new Pointer(coordinateX + bitmap.getWidth(), coordinateY, matrix);
