@@ -1,4 +1,4 @@
-package com.hovanly.dut.canvas;
+package com.hovanly.dut.canvas.models;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -9,6 +9,9 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.support.annotation.NonNull;
 import android.util.Log;
+
+import com.hovanly.dut.canvas.utils.GraphicUtils;
+import com.hovanly.dut.canvas.R;
 
 import lombok.Data;
 

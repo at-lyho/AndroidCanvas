@@ -1,4 +1,4 @@
-package com.hovanly.dut.canvas;
+package com.hovanly.dut.canvas.models;
 
 import android.graphics.Matrix;
 import android.support.annotation.NonNull;

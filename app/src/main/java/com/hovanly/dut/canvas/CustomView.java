@@ -11,6 +11,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import com.hovanly.dut.canvas.models.Sticker;
+
 /**
  * Copyright@ AsianTech.Inc
  * Created by Ly Ho V. on 31/07/2017
