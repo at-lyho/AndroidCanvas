@@ -22,14 +22,14 @@ public class Sticker extends BaseSticker {
     private Bitmap bitmap;
     private Bitmap bitmapRotate;
     private Bitmap bitmapDelete;
-    private float distanceX;
-    private float distanceY;
+    private float distanceX = 10f;
+    private float distanceY = 10f;
     private Paint paint;
     private Path path = new Path();
-    private Matrix subMatrix = new Matrix();
+    private Matrix matrix = new Matrix();
 
     public Sticker(@NonNull Context context) {
-        paint = new Paint();
+        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setStrokeWidth(5);
         paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.STROKE);
@@ -38,8 +38,8 @@ public class Sticker extends BaseSticker {
         setBitmapRotate(GraphicUtils.getBitmapFormResource(context, R.drawable.ic_rotate, GraphicUtils.dpToPx(24), GraphicUtils.dpToPx(24)));
         setCoordinateX(100);
         setCoordinateY(100);
-        setScale(2f);
-        setDegrees(10f);
+        setScale(1f);
+        setDegrees(2f);
     }
 
     @Override
@@ -60,19 +60,19 @@ public class Sticker extends BaseSticker {
     }
 
     private void drawDelete(Canvas canvas) {
-        Pointer pointer = new Pointer(getCoordinateX(), getCoordinateY(), getSubMatrix());
+        Pointer pointer = new Pointer(getCoordinateX(), getCoordinateY(), getMatrix());
         canvas.drawBitmap(bitmapDelete, pointer.getX() - bitmapDelete.getWidth() / 2, pointer.getY() - bitmapDelete.getHeight() / 2, null);
     }
 
     private void drawRotate(Canvas canvas) {
-        Pointer pointer = new Pointer(getCoordinateX() + bitmap.getWidth(), getCoordinateY() + bitmap.getHeight(), getSubMatrix());
+        Pointer pointer = new Pointer(getCoordinateX() + bitmap.getWidth(), getCoordinateY() + bitmap.getHeight(), getMatrix());
         canvas.drawBitmap(bitmapRotate, pointer.getX() - bitmapDelete.getWidth() / 2, pointer.getY() - bitmapDelete.getHeight() / 2, null);
     }
 
     private void drawBoundSticker(Canvas canvas) {
         float coordinateX = getCoordinateX();
         float coordinateY = getCoordinateY();
-        Matrix matrix = getSubMatrix();
+        Matrix matrix = getMatrix();
         Pointer pointer1 = new Pointer(coordinateX, coordinateY, matrix);
         Pointer pointer2 = new Pointer(coordinateX + bitmap.getWidth(), coordinateY, matrix);
         Pointer pointer3 = new Pointer(coordinateX + bitmap.getWidth(), coordinateY + bitmap.getHeight(), matrix);
@@ -87,24 +87,20 @@ public class Sticker extends BaseSticker {
     }
 
     private void onUpdateMatrixSticker() {
-        subMatrix.reset();
-        subMatrix.postScale(getScale(), getScale());
-        subMatrix.postRotate(getDegrees());
-     //   subMatrix.postTranslate(distanceX, distanceY);
-        postConcatMatrix(subMatrix);
+      /*  matrix.postScale(getScale(), getScale());
+        matrix.postRotate(getDegrees());*/
+        matrix.postTranslate(distanceX, distanceY);
     }
 
     public void updateMove(float x, float y) {
         distanceX = x;
         distanceY = y;
-       /* setCoordinateX(getCoordinateX() + x);
-        setCoordinateY(getCoordinateY() + y);*/
     }
 
     public boolean isTouchInsideTicker(float x, float y) {
         float coordinateX = getCoordinateX();
         float coordinateY = getCoordinateY();
-        Matrix matrix = getSubMatrix();
+        Matrix matrix = getMatrix();
         Pointer pointer = new Pointer(x, y);
         Pointer pointer1 = new Pointer(coordinateX, coordinateY, matrix);
         Pointer pointer2 = new Pointer(coordinateX + bitmap.getWidth(), coordinateY, matrix);
