@@ -22,11 +22,11 @@ public class Sticker extends Shape {
     private EditerSticker rotateAction;
     private RectSticker rectSticker;
     private Bitmap bitmapSticker;
+    private Matrix matrix = new Matrix();
     private float distanceX;
     private float distanceY;
     private float scale;
     private float degrees;
-    private Matrix matrix = new Matrix();
 
     public Sticker(@NonNull Context context) {
         setBitmapSticker(GraphicUtils.getBitmapFormResource(context, R.drawable.broccoli, GraphicUtils.dpToPx(100), GraphicUtils.dpToPx(100)));
@@ -84,6 +84,9 @@ public class Sticker extends Shape {
         rectSticker.onDraw(canvas, getMatrix());
     }
 
+    /**
+     * update matrix if sticker rotate, move, and scale
+     */
     private void onUpdateMatrixSticker() {
       /*  matrix.postScale(getScale(), getScale());
         matrix.postRotate(getDegrees());*/
