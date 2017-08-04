@@ -79,13 +79,13 @@ public class GraphicUtils {
         float y = originY - yTouch;
         switch (getQuadrant(x, y, originX, originY)) {
             case 1:
-                return Math.asin(y / Math.hypot(x, y)) * 180 / Math.PI;
+                return 360 - Math.atan(x / y) / Math.PI * 180;
             case 2:
-                return 180 - Math.asin(y / Math.hypot(x, y)) * 180 / Math.PI;
+                return 270 - Math.atan(x / y) / Math.PI * 180;
             case 3:
-                return 180 + (-1 * Math.asin(y / Math.hypot(x, y)) * 180 / Math.PI);
+                return 90 + Math.atan(x / y) / Math.PI * 180;
             case 4:
-                return 360 + Math.asin(y / Math.hypot(x, y)) * 180 / Math.PI;
+                return Math.atan(x / y) / Math.PI * 180;
             default:
                 return 0;
         }
@@ -95,11 +95,11 @@ public class GraphicUtils {
     /**
      * @return The selected quadrant.
      *           *
-     *       4   *    1
+     *       2   *    1
      *           *
      * *******************
      *           *
-     *      3    *   2
+     *      3    *   4
      *           *
      */
     private static int getQuadrant(float x, float y, float originX, float originY) {

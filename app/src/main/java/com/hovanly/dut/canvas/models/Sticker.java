@@ -27,15 +27,11 @@ public class Sticker extends Shape implements OnStickerActionListener {
     private RectSticker rectSticker;
     private Bitmap bitmapSticker;
     private Matrix matrixSticker = new Matrix();
-    private float distanceX;
-    private float distanceY;
-    private float scale = 1.0f;
-    private float degrees;
 
-    public Sticker(@NonNull Context context) {
+    public Sticker(@NonNull Context context, float x, float y) {
         setBitmapSticker(GraphicUtils.getBitmapFormResource(context, R.drawable.broccoli, GraphicUtils.dpToPx(100), GraphicUtils.dpToPx(100)));
-        setRealCoordinateX(100);
-        setRealCoordinateY(100);
+        setRealCoordinateX(x);
+        setRealCoordinateY(y);
         // Create Action Delete
         deletedAction = new EditerSticker();
         deletedAction.setBitmap(GraphicUtils.getBitmapFormResource(context, R.drawable.ic_remove, GraphicUtils.dpToPx(24), GraphicUtils.dpToPx(24)));
@@ -60,7 +56,6 @@ public class Sticker extends Shape implements OnStickerActionListener {
 
     @Override
     public void onDraw(Canvas canvas) {
-        onUpdateMatrixSticker();
         drawSticker(canvas);
         drawBoundSticker(canvas);
         drawDelete(canvas);
@@ -89,11 +84,6 @@ public class Sticker extends Shape implements OnStickerActionListener {
     /**
      * update matrixSticker if sticker rotate, move, and scale
      */
-    private void onUpdateMatrixSticker() {
-        matrixSticker.postRotate(getDegrees());
-        matrixSticker.postTranslate(distanceX, distanceY);
-    }
-
     @Override
     public boolean isTouchInside(float x, float y) {
         return rectSticker.isTouchInside(x, y, getMatrixSticker());
@@ -101,13 +91,13 @@ public class Sticker extends Shape implements OnStickerActionListener {
 
     @Override
     public void onMove(float distanceX, float distanceY) {
-        this.distanceX = distanceX;
-        this.distanceY = distanceY;
+        matrixSticker.postTranslate(distanceX, distanceY);
     }
 
     @Override
     public void onRotate(float degrees) {
-        // TODO set rotate
+        Pointer pointer = new Pointer(getRealCoordinateX() + bitmapSticker.getWidth() / 2, getRealCoordinateY() + bitmapSticker.getHeight() / 2, matrixSticker);
+        matrixSticker.postRotate(degrees, pointer.getX(), pointer.getY());
     }
 
     @Override
