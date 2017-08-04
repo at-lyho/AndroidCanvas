@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.support.annotation.NonNull;
 
 import com.hovanly.dut.canvas.models.Pointer;
 
@@ -42,5 +44,25 @@ public class GraphicUtils {
         b2 = sign(pointer, pointer2, pointer3) < 0.0f;
         b3 = sign(pointer, pointer3, pointer1) < 0.0f;
         return ((b1 == b2) && (b2 == b3));
+    }
+
+    /**
+     *
+     * @param matrix
+     * @param minScale
+     * @param maxScale
+     * @param focusX
+     * @param focusY
+     */
+    public static void onLimitScaleMatrix(@NonNull Matrix matrix, float minScale, float maxScale, float focusX, float focusY) {
+        float[] values = new float[9];
+        matrix.getValues(values);
+        float scaleX = values[Matrix.MSCALE_X];
+        float scaleY = values[Matrix.MSCALE_Y];
+        if (scaleX >= maxScale) {
+            matrix.postScale(maxScale / scaleX, maxScale / scaleY, focusX, focusY);
+        } else if (scaleX <= minScale) {
+            matrix.postScale(minScale / scaleX, minScale / scaleY, focusX, focusY);
+        }
     }
 }

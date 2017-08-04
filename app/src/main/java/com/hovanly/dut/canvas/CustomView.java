@@ -2,12 +2,10 @@ package com.hovanly.dut.canvas;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.Toast;
 
@@ -18,12 +16,19 @@ import com.hovanly.dut.canvas.models.Sticker;
  * Created by Ly Ho V. on 31/07/2017
  */
 public class CustomView extends View {
-    private Paint paint;
-    private GestureDetector mGestureDetector;
+    private static final String TAG = CustomView.class.getSimpleName();
+    Mode mMode = Mode.NONE;
+    private float mScale = 1.0f;
     private float mTouchX;
     private float mTouchY;
     private Sticker mSticker;
+    private ScaleGestureDetector mScaleGestureDetector;
 
+    private void init(Context context) {
+        mSticker = new Sticker(context);
+        OnScaleListener onScaleListener = new OnScaleListener();
+        mScaleGestureDetector = new ScaleGestureDetector(context, onScaleListener);
+    }
 
     public CustomView(Context context) {
         super(context);
@@ -35,12 +40,41 @@ public class CustomView extends View {
         init(context);
     }
 
-    private void init(Context context) {
-        paint = new Paint();
-        paint.setFlags(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(Color.RED);
-        mGestureDetector = new GestureDetector(context, new GestureDetectorCustom());
-        mSticker = new Sticker(context);
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        mScaleGestureDetector.onTouchEvent(event);
+        int numTouch = event.getPointerCount();
+        switch (event.getAction() & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_DOWN:
+                mMode = Mode.MOVE;
+                mTouchX = event.getX();
+                mTouchY = event.getY();
+                if (mSticker.isTouchInside(mTouchX, mTouchY)){
+                    Toast.makeText(getContext(), "inside", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if (mMode == Mode.MOVE) {
+                    mSticker.updateMove(event.getX() - mTouchX, event.getY() - mTouchY);
+                    mTouchX = event.getX();
+                    mTouchY = event.getY();
+                    invalidate();
+                }
+                break;
+            case MotionEvent.ACTION_POINTER_DOWN:
+                if (numTouch >= 2) {
+                    mMode = Mode.ZOOM;
+                } else {
+                    mMode = Mode.NONE;
+                }
+                break;
+            case MotionEvent.ACTION_POINTER_UP:
+                mMode = Mode.NONE;
+                break;
+            case MotionEvent.ACTION_UP:
+                mMode = Mode.NONE;
+        }
+        return true;
     }
 
     @Override
@@ -49,27 +83,8 @@ public class CustomView extends View {
         mSticker.onDraw(canvas);
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        mGestureDetector.onTouchEvent(event);
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                mTouchX = event.getX();
-                mTouchY = event.getY();
-                if (mSticker.isTouchInside(mTouchX, mTouchY)){
-                    Toast.makeText(getContext(), "inside", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case MotionEvent.ACTION_MOVE:
-                mSticker.updateMove(event.getX() - mTouchX, event.getY() - mTouchY);
-                mTouchX = event.getX();
-                mTouchY = event.getY();
-                invalidate();
-                break;
-            case MotionEvent.ACTION_UP:
-                break;
-        }
-        return true;
+    private enum Mode {
+        NONE, MOVE, ZOOM
     }
   /*  private double getAngle(double xTouch, double yTouch) {
         double x = xTouch - (dialerWidth / 2d);
@@ -101,36 +116,16 @@ public class CustomView extends View {
             return y >= 0 ? 2 : 3;
         }
     }*/
-    private class GestureDetectorCustom implements GestureDetector.OnGestureListener {
-
+    public class OnScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        public static final float MIN_SCALE = 1.0f;
+        public static final float MAX_SCALE = 3.0F;
         @Override
-        public boolean onDown(MotionEvent e) {
+        public boolean onScale(ScaleGestureDetector detector) {
+            if (mMode == Mode.ZOOM) {
+                mSticker.updateScale(detector);
+                invalidate();
+            }
             return true;
-        }
-
-        @Override
-        public void onShowPress(MotionEvent e) {
-
-        }
-
-        @Override
-        public boolean onSingleTapUp(MotionEvent e) {
-            return false;
-        }
-
-        @Override
-        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            return true;
-        }
-
-        @Override
-        public void onLongPress(MotionEvent e) {
-
-        }
-
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            return false;
         }
     }
 }

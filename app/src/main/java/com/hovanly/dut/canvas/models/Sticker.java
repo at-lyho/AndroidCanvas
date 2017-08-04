@@ -5,11 +5,15 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.support.annotation.NonNull;
+import android.view.ScaleGestureDetector;
 
 import com.hovanly.dut.canvas.R;
 import com.hovanly.dut.canvas.utils.GraphicUtils;
 
 import lombok.Data;
+
+import static com.hovanly.dut.canvas.CustomView.OnScaleListener.MAX_SCALE;
+import static com.hovanly.dut.canvas.CustomView.OnScaleListener.MIN_SCALE;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -22,18 +26,16 @@ public class Sticker extends Shape {
     private EditerSticker rotateAction;
     private RectSticker rectSticker;
     private Bitmap bitmapSticker;
-    private Matrix matrix = new Matrix();
+    private Matrix matrixSticker = new Matrix();
     private float distanceX;
     private float distanceY;
-    private float scale;
+    private float scale = 1.0f;
     private float degrees;
 
     public Sticker(@NonNull Context context) {
         setBitmapSticker(GraphicUtils.getBitmapFormResource(context, R.drawable.broccoli, GraphicUtils.dpToPx(100), GraphicUtils.dpToPx(100)));
         setRealCoordinateX(100);
         setRealCoordinateY(100);
-        setScale(1f);
-        setDegrees(2f);
         // Create Action Delete
         deletedAction = new EditerSticker();
         deletedAction.setBitmap(GraphicUtils.getBitmapFormResource(context, R.drawable.ic_remove, GraphicUtils.dpToPx(24), GraphicUtils.dpToPx(24)));
@@ -67,30 +69,29 @@ public class Sticker extends Shape {
 
     private void drawSticker(Canvas canvas) {
         canvas.save();
-        canvas.concat(getMatrix());
+        canvas.concat(getMatrixSticker());
         canvas.drawBitmap(bitmapSticker, getRealCoordinateX(), getRealCoordinateY(), null);
         canvas.restore();
     }
 
     private void drawDelete(Canvas canvas) {
-        deletedAction.onDraw(canvas, getMatrix());
+        deletedAction.onDraw(canvas, getMatrixSticker());
     }
 
     private void drawRotate(Canvas canvas) {
-        rotateAction.onDraw(canvas, getMatrix());
+        rotateAction.onDraw(canvas, getMatrixSticker());
     }
 
     private void drawBoundSticker(Canvas canvas) {
-        rectSticker.onDraw(canvas, getMatrix());
+        rectSticker.onDraw(canvas, getMatrixSticker());
     }
 
     /**
-     * update matrix if sticker rotate, move, and scale
+     * update matrixSticker if sticker rotate, move, and scale
      */
     private void onUpdateMatrixSticker() {
-      /*  matrix.postScale(getScale(), getScale());
-        matrix.postRotate(getDegrees());*/
-        matrix.postTranslate(distanceX, distanceY);
+        matrixSticker.postRotate(getDegrees());
+        matrixSticker.postTranslate(distanceX, distanceY);
     }
 
     public void updateMove(float x, float y) {
@@ -100,6 +101,12 @@ public class Sticker extends Shape {
 
     @Override
     public boolean isTouchInside(float x, float y) {
-        return rectSticker.isTouchInside(x, y, getMatrix());
+        return rectSticker.isTouchInside(x, y, getMatrixSticker());
+    }
+
+    public void updateScale(ScaleGestureDetector detector) {
+        Pointer pointer = new Pointer(getRealCoordinateX() + bitmapSticker.getWidth() / 2, getRealCoordinateY() + bitmapSticker.getHeight() / 2, matrixSticker);
+        matrixSticker.postScale(detector.getScaleFactor(), detector.getScaleFactor(), pointer.getX(), pointer.getY());
+        GraphicUtils.onLimitScaleMatrix(matrixSticker, MIN_SCALE, MAX_SCALE, pointer.getX(), pointer.getY());
     }
 }
