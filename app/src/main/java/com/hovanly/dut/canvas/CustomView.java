@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.widget.Toast;
 
 import com.hovanly.dut.canvas.models.Sticker;
 import com.hovanly.dut.canvas.utils.GraphicUtils;
@@ -54,17 +55,22 @@ public class CustomView extends View {
                 mTouchX = event.getX();
                 mTouchY = event.getY();
                 lastAngle = GraphicUtils.getAngle(mTouchX, mTouchY, mCenterX, mCenterY);
+                if (mSticker.isTouchInside(mTouchX, mTouchY)) {
+                    Toast.makeText(getContext(), "inSide", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case MotionEvent.ACTION_MOVE:
-              /*  if (mMode == Mode.MOVE) {
-                    mSticker.onMove(event.getX() - mTouchX, event.getY() - mTouchY);
+                if (mMode == Mode.MOVE) {
+                    /*mSticker.onMove(event.getX() - mTouchX, event.getY() - mTouchY);
                     mTouchX = event.getX();
                     mTouchY = event.getY();
+                    invalidate();*/
+                    double newAngle = GraphicUtils.getAngle(event.getX(), event.getY(), mCenterX, mCenterY);
+                    mSticker.onRotate((float) (newAngle - lastAngle));
                     invalidate();
-                }*/
-                double newAngle = GraphicUtils.getAngle(event.getX(), event.getY(), mCenterX, mCenterY);
-                mSticker.onRotate((float) (newAngle - lastAngle));
-                invalidate();
+                    lastAngle = newAngle;
+                }
+
                 break;
             case MotionEvent.ACTION_POINTER_DOWN:
                 if (numTouch >= 2) {
@@ -112,10 +118,10 @@ public class CustomView extends View {
         public static final float MAX_SCALE = 3.0F;
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
-          /*  if (mMode == Mode.ZOOM) {
+            if (mMode == Mode.ZOOM) {
                 mSticker.onZoom(detector);
                 invalidate();
-            }*/
+            }
             return true;
         }
     }

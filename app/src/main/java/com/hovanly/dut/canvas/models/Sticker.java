@@ -26,6 +26,7 @@ public class Sticker extends Shape implements OnStickerActionListener {
     private EditerSticker rotateAction;
     private RectSticker rectSticker;
     private Bitmap bitmapSticker;
+    private float anple;
     private Matrix matrixSticker = new Matrix();
 
     public Sticker(@NonNull Context context, float x, float y) {
@@ -64,7 +65,7 @@ public class Sticker extends Shape implements OnStickerActionListener {
 
     private void drawSticker(Canvas canvas) {
         canvas.save();
-        canvas.concat(getMatrixSticker());
+        canvas.concat(matrixSticker);
         canvas.drawBitmap(bitmapSticker, getRealCoordinateX(), getRealCoordinateY(), null);
         canvas.restore();
     }
@@ -86,7 +87,7 @@ public class Sticker extends Shape implements OnStickerActionListener {
      */
     @Override
     public boolean isTouchInside(float x, float y) {
-        return rectSticker.isTouchInside(x, y, getMatrixSticker());
+        return rectSticker.isTouchInside(x, y, matrixSticker);
     }
 
     @Override
