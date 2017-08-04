@@ -20,7 +20,7 @@ import static com.hovanly.dut.canvas.CustomView.OnScaleListener.MIN_SCALE;
  * Created by Ly Ho V. on 02/08/2017
  */
 @Data
-public class Sticker extends Shape {
+public class Sticker extends Shape implements OnStickerActionListener {
     private static final String TAG = Sticker.class.getSimpleName();
     private EditerSticker deletedAction;
     private EditerSticker rotateAction;
@@ -94,19 +94,26 @@ public class Sticker extends Shape {
         matrixSticker.postTranslate(distanceX, distanceY);
     }
 
-    public void updateMove(float x, float y) {
-        distanceX = x;
-        distanceY = y;
-    }
-
     @Override
     public boolean isTouchInside(float x, float y) {
         return rectSticker.isTouchInside(x, y, getMatrixSticker());
     }
 
-    public void updateScale(ScaleGestureDetector detector) {
+    @Override
+    public void onMove(float distanceX, float distanceY) {
+        this.distanceX = distanceX;
+        this.distanceY = distanceY;
+    }
+
+    @Override
+    public void onRotate(float degrees) {
+        // TODO set rotate
+    }
+
+    @Override
+    public void onZoom(ScaleGestureDetector scaleGestureDetector) {
         Pointer pointer = new Pointer(getRealCoordinateX() + bitmapSticker.getWidth() / 2, getRealCoordinateY() + bitmapSticker.getHeight() / 2, matrixSticker);
-        matrixSticker.postScale(detector.getScaleFactor(), detector.getScaleFactor(), pointer.getX(), pointer.getY());
+        matrixSticker.postScale(scaleGestureDetector.getScaleFactor(), scaleGestureDetector.getScaleFactor(), pointer.getX(), pointer.getY());
         GraphicUtils.onLimitScaleMatrix(matrixSticker, MIN_SCALE, MAX_SCALE, pointer.getX(), pointer.getY());
     }
 }

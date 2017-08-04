@@ -55,7 +55,7 @@ public class CustomView extends View {
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (mMode == Mode.MOVE) {
-                    mSticker.updateMove(event.getX() - mTouchX, event.getY() - mTouchY);
+                    mSticker.onMove(event.getX() - mTouchX, event.getY() - mTouchY);
                     mTouchX = event.getX();
                     mTouchY = event.getY();
                     invalidate();
@@ -122,7 +122,7 @@ public class CustomView extends View {
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
             if (mMode == Mode.ZOOM) {
-                mSticker.updateScale(detector);
+                mSticker.onZoom(detector);
                 invalidate();
             }
             return true;
