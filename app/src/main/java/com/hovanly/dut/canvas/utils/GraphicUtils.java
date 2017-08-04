@@ -65,4 +65,48 @@ public class GraphicUtils {
             matrix.postScale(minScale / scaleX, minScale / scaleY, focusX, focusY);
         }
     }
+
+    /**
+     * @param xTouch
+     * @param yTouch
+     * @param originX coordinate x of origin
+     * @param originY coordinate x of origin
+     *                originX, originY must in canvas and not is canvas origin.
+     * @return
+     */
+    public static double getAngle(float xTouch, float yTouch, float originX, float originY) {
+        float x = xTouch - originX;
+        float y = originY - yTouch;
+        switch (getQuadrant(x, y, originX, originY)) {
+            case 1:
+                return Math.asin(y / Math.hypot(x, y)) * 180 / Math.PI;
+            case 2:
+                return 180 - Math.asin(y / Math.hypot(x, y)) * 180 / Math.PI;
+            case 3:
+                return 180 + (-1 * Math.asin(y / Math.hypot(x, y)) * 180 / Math.PI);
+            case 4:
+                return 360 + Math.asin(y / Math.hypot(x, y)) * 180 / Math.PI;
+            default:
+                return 0;
+        }
+    }
+
+
+    /**
+     * @return The selected quadrant.
+     *           *
+     *       4   *    1
+     *           *
+     * *******************
+     *           *
+     *      3    *   2
+     *           *
+     */
+    private static int getQuadrant(float x, float y, float originX, float originY) {
+        if (x >= originX) {
+            return y >= originX ? 1 : 4;
+        } else {
+            return y >= originY ? 2 : 3;
+        }
+    }
 }
