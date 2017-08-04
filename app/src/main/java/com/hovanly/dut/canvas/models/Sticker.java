@@ -101,6 +101,10 @@ public class Sticker extends Shape implements OnStickerActionListener {
         matrixSticker.postRotate(degrees, pointer.getX(), pointer.getY());
     }
 
+    public Pointer getCoordinateRotate() {
+        Pointer pointer = new Pointer(getRealCoordinateX() + bitmapSticker.getWidth() / 2, getRealCoordinateY() + bitmapSticker.getHeight() / 2, matrixSticker);
+        return new Pointer(pointer.getX(), pointer.getY());
+    }
     @Override
     public void onZoom(ScaleGestureDetector scaleGestureDetector) {
         Pointer pointer = new Pointer(getRealCoordinateX() + bitmapSticker.getWidth() / 2, getRealCoordinateY() + bitmapSticker.getHeight() / 2, matrixSticker);

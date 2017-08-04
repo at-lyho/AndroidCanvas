@@ -2,8 +2,6 @@ package com.hovanly.dut.canvas;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -11,6 +9,7 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.Toast;
 
+import com.hovanly.dut.canvas.models.Pointer;
 import com.hovanly.dut.canvas.models.Sticker;
 import com.hovanly.dut.canvas.utils.GraphicUtils;
 
@@ -23,26 +22,23 @@ public class CustomView extends View {
     Mode mMode = Mode.NONE;
     private float mTouchX;
     private float mTouchY;
-    Paint paint;
-    private float mCenterX;
     private Sticker mSticker;
-    private float mCenterY;
-    private boolean isInit = false;
     private double lastAngle = 0;
     private ScaleGestureDetector mScaleGestureDetector;
 
     public CustomView(Context context) {
         super(context);
-        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(Color.WHITE);
-        paint.setStrokeWidth(2);
+        init(context);
     }
 
     public CustomView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(Color.WHITE);
-        paint.setStrokeWidth(2);
+        init(context);
+    }
+
+    private void init(Context context) {
+        mSticker = new Sticker(context, 200, 200);
+        mScaleGestureDetector = new ScaleGestureDetector(context, new OnScaleListener());
     }
 
     @Override
@@ -54,7 +50,8 @@ public class CustomView extends View {
                 mMode = Mode.MOVE;
                 mTouchX = event.getX();
                 mTouchY = event.getY();
-                lastAngle = GraphicUtils.getAngle(mTouchX, mTouchY, mCenterX, mCenterY);
+                Pointer pointer = mSticker.getCoordinateRotate();
+                lastAngle = GraphicUtils.getAngle(mTouchX, mTouchY, pointer.getX(), pointer.getY());
                 if (mSticker.isTouchInside(mTouchX, mTouchY)) {
                     Toast.makeText(getContext(), "inSide", Toast.LENGTH_SHORT).show();
                 }
@@ -65,10 +62,11 @@ public class CustomView extends View {
                     mTouchX = event.getX();
                     mTouchY = event.getY();
                     invalidate();*/
-                    double newAngle = GraphicUtils.getAngle(event.getX(), event.getY(), mCenterX, mCenterY);
+                    Pointer pointer1 = mSticker.getCoordinateRotate();
+                    double newAngle = GraphicUtils.getAngle(event.getX(), event.getY(), pointer1.getX(), pointer1.getY());
                     mSticker.onRotate((float) (newAngle - lastAngle));
-                    invalidate();
                     lastAngle = newAngle;
+                    invalidate();
                 }
 
                 break;
@@ -90,16 +88,6 @@ public class CustomView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (!isInit) {
-            mCenterX = getWidth() / 2;
-            mCenterY = getHeight() / 2;
-            mSticker = new Sticker(getContext(), mCenterX, mCenterY);
-            OnScaleListener onScaleListener = new OnScaleListener();
-            mScaleGestureDetector = new ScaleGestureDetector(getContext(), onScaleListener);
-            isInit = true;
-        }
-        canvas.drawLine(mCenterX, 0, mCenterX, getHeight(), paint);
-        canvas.drawLine(0, mCenterY, getWidth(), mCenterY, paint);
         mSticker.onDraw(canvas);
     }
 
@@ -115,13 +103,13 @@ public class CustomView extends View {
      */
     public class OnScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
         public static final float MIN_SCALE = 1.0f;
-        public static final float MAX_SCALE = 3.0F;
+        public static final float MAX_SCALE = 3.0f;
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
-            if (mMode == Mode.ZOOM) {
+         /*   if (mMode == Mode.ZOOM) {
                 mSticker.onZoom(detector);
                 invalidate();
-            }
+            }*/
             return true;
         }
     }
