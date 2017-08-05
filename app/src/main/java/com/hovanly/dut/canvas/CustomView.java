@@ -23,7 +23,7 @@ public class CustomView extends View {
     private float mTouchX;
     private float mTouchY;
     private Sticker mSticker;
-    private double lastAngle = 0;
+    private double startAngle = 0;
     private ScaleGestureDetector mScaleGestureDetector;
 
     public CustomView(Context context) {
@@ -51,7 +51,7 @@ public class CustomView extends View {
                 mTouchX = event.getX();
                 mTouchY = event.getY();
                 Pointer pointer = mSticker.getCoordinateRotate();
-                lastAngle = GraphicUtils.getAngle(mTouchX, mTouchY, pointer.getX(), pointer.getY());
+                startAngle = GraphicUtils.getAngle(mTouchX, mTouchY, pointer.getX(), pointer.getY());
                 if (mSticker.isTouchInside(mTouchX, mTouchY)) {
                     Toast.makeText(getContext(), "inSide", Toast.LENGTH_SHORT).show();
                 }
@@ -64,8 +64,8 @@ public class CustomView extends View {
                     invalidate();*/
                     Pointer pointer1 = mSticker.getCoordinateRotate();
                     double newAngle = GraphicUtils.getAngle(event.getX(), event.getY(), pointer1.getX(), pointer1.getY());
-                    mSticker.onRotate((float) (newAngle - lastAngle));
-                    lastAngle = newAngle;
+                    mSticker.onRotate((float) (startAngle - newAngle));
+                    startAngle = newAngle;
                     invalidate();
                 }
 

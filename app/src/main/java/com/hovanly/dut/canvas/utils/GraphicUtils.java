@@ -75,17 +75,29 @@ public class GraphicUtils {
      * @return
      */
     public static double getAngle(float xTouch, float yTouch, float originX, float originY) {
-        float x = xTouch - originX;
-        float y = originY - yTouch;
-        switch (getQuadrant(x, y, originX, originY)) {
+        float x = Math.abs(xTouch - originX);
+        float y = Math.abs(yTouch - originY);
+        switch (getQuadrant(xTouch, yTouch, originX, originY)) {
             case 1:
-                return 360 - Math.atan(x / y) / Math.PI * 180;
-            case 2:
-                return 270 - Math.atan(x / y) / Math.PI * 180;
-            case 3:
-                return 90 + Math.atan(x / y) / Math.PI * 180;
-            case 4:
+                if (y == 0) {
+                    return 90;
+                }
                 return Math.atan(x / y) / Math.PI * 180;
+            case 2:
+                if (x == 0) {
+                    return 0;
+                }
+                return 270 + Math.atan(y / x) / Math.PI * 180;
+            case 3:
+                if (y == 0) {
+                    return 270;
+                }
+                return 180 + Math.atan(x / y) / Math.PI * 180;
+            case 4:
+                if (x == 0) {
+                    return 180;
+                }
+                return 90 + Math.atan(y / x) / Math.PI * 180;
             default:
                 return 0;
         }
