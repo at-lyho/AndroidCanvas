@@ -47,7 +47,6 @@ public class GraphicUtils {
     }
 
     /**
-     *
      * @param matrix
      * @param minScale
      * @param maxScale
@@ -94,13 +93,13 @@ public class GraphicUtils {
 
     /**
      * @return The selected quadrant.
-     *           *
-     *       2   *    1
-     *           *
+     * *
+     * 2   *    1
+     * *
      * *******************
-     *           *
-     *      3    *   4
-     *           *
+     * *
+     * 3    *   4
+     * *
      */
     private static int getQuadrant(float x, float y, float originX, float originY) {
         if (x >= originX) {
