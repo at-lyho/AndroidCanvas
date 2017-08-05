@@ -79,25 +79,13 @@ public class GraphicUtils {
         float y = Math.abs(yTouch - originY);
         switch (getQuadrant(xTouch, yTouch, originX, originY)) {
             case 1:
-                if (y == 0) {
-                    return 90;
-                }
-                return Math.atan(x / y) / Math.PI * 180;
+                return Math.asin(x / Math.hypot(x, y)) / Math.PI * 180;
             case 2:
-                if (x == 0) {
-                    return 0;
-                }
-                return 270 + Math.atan(y / x) / Math.PI * 180;
+                return 270 + Math.asin(y / Math.hypot(x, y)) / Math.PI * 180;
             case 3:
-                if (y == 0) {
-                    return 270;
-                }
-                return 180 + Math.atan(x / y) / Math.PI * 180;
+                return 180 + Math.asin(x / Math.hypot(x, y)) / Math.PI * 180;
             case 4:
-                if (x == 0) {
-                    return 180;
-                }
-                return 90 + Math.atan(y / x) / Math.PI * 180;
+                return 90 + Math.asin(y / Math.hypot(x, y)) / Math.PI * 180;
             default:
                 return 0;
         }

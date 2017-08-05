@@ -26,7 +26,6 @@ public class Sticker extends Shape implements OnStickerActionListener {
     private EditerSticker rotateAction;
     private RectSticker rectSticker;
     private Bitmap bitmapSticker;
-    private float anple;
     private Matrix matrixSticker = new Matrix();
 
     public Sticker(@NonNull Context context, float x, float y) {
